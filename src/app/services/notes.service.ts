@@ -1,0 +1,23 @@
+// src/app/notes.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class NotesService {
+  private apiUrl = 'http://localhost:3000/notes'; // URL do API Nest.js
+
+  constructor(private http: HttpClient) {}
+
+  // Pobranie wszystkich notatek
+  getNotes(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  // Dodanie nowej notatki
+  addNote(title: string, content: string): Observable<any> {
+    return this.http.post<any>(this.apiUrl, { title, content });
+  }
+}

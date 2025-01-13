@@ -1,0 +1,27 @@
+<div class="notes-container">
+    <h1 class="notes-title">Notatki</h1>
+  
+    <div class="note-form">
+      <input class="note-input" [(ngModel)]="title" placeholder="Tytuł" />
+      <input class="note-input" [(ngModel)]="content" placeholder="Treść" />
+      <button class="note-button" (click)="addNote()">Dodaj notatkę</button>
+    </div>
+  
+    <table class="notes-table">
+      <thead class="notes-table-header">
+        <tr>
+          <th>ID</th>
+          <th>Tytuł</th>
+          <th>Treść</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let note of notes" class="notes-table-row">
+          <td>{{ note.id }}</td>
+          <td>{{ note.title }}</td>
+          <td>{{ note.content }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
