@@ -20,4 +20,14 @@ export class NotesService {
   addNote(title: string, content: string): Observable<any> {
     return this.http.post<any>(this.apiUrl, { title, content });
   }
+
+  // Usunięcie notatki
+  deleteNote(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Edycja notatki
+  updateNote(id: number, title: string, content: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, { title, content });
+  }
 }

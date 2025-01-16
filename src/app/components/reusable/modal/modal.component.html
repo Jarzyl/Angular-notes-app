@@ -1,0 +1,15 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="close()"></div>
+<div class="modal" *ngIf="isVisible">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h2 class="modal-title">{{ title }}</h2>
+      <button class="modal-close" (click)="close()">×</button>
+    </header>
+    <div class="modal-body">
+      <ng-content></ng-content>
+    </div>
+    <footer class="modal-footer">
+      <button class="modal-close-footer" (click)="close()">Zamknij</button>
+    </footer>
+  </div>
+</div>
