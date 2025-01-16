@@ -1,27 +1,66 @@
 <div class="notes-container">
-    <h1 class="notes-title">Notatki</h1>
-  
-    <div class="note-form">
-      <input class="note-input" [(ngModel)]="title" placeholder="Tytuł" />
-      <input class="note-input" [(ngModel)]="content" placeholder="Treść" />
-      <button class="note-button" (click)="addNote()">Dodaj notatkę</button>
-    </div>
-  
-    <table class="notes-table">
-      <thead class="notes-table-header">
-        <tr>
-          <th>ID</th>
-          <th>Tytuł</th>
-          <th>Treść</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let note of notes" class="notes-table-row">
-          <td>{{ note.id }}</td>
-          <td>{{ note.title }}</td>
-          <td>{{ note.content }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <h1 class="notes-title">Notatki</h1>
+
+  <div class="note-form">
+    <input class="note-input" [(ngModel)]="title" placeholder="Tytuł" />
+    <input class="note-input" [(ngModel)]="content" placeholder="Treść" />
+    <button class="note-button" (click)="addNote()">Dodaj notatkę</button>
   </div>
-  
+
+  <table class="notes-table">
+    <thead class="notes-table-header">
+      <tr>
+        <th>Numer</th>
+        <th>Tytuł</th>
+        <th>Treść</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let note of notes" class="notes-table-row">
+        <td>{{ note.id }}</td>
+        <td>{{ note.title }}</td>
+        <td>{{ note.content }}</td>
+        <td class="btn-container">
+          <button class="btn edit-btn" (click)="openEditModal(note)">
+            Edytuj
+          </button>
+          <button class="btn delete-btn" (click)="openDeleteModal(note)">
+            Usuń
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <app-modal
+    [(isVisible)]="isModalVisible"
+    [title]="modalType === 'edit' ? 'Edytuj Notatkę' : 'Usuń Notatkę'"
+  >
+    <div *ngIf="modalType === 'edit' && selectedNote" class="edit-note-content">
+      <input
+        class="note-input"
+        [(ngModel)]="selectedNote.title"
+        placeholder="Tytuł"
+      />
+      <input
+        class="note-input"
+        [(ngModel)]="selectedNote.content"
+        placeholder="Treść"
+      />
+      <button class="save-button" (click)="saveNote()">Zapisz</button>
+    </div>
+
+    <div
+      *ngIf="modalType === 'delete' && selectedNote"
+      class="delete-note-content"
+    >
+      <p>
+        Czy na pewno chcesz usunąć notatkę
+        <strong>{{ selectedNote.title }}</strong
+        >?
+      </p>
+      <button class="delete-confirm-button" (click)="deleteNote()">Usuń</button>
+    </div>
+  </app-modal>
+</div>

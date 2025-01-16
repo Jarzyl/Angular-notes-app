@@ -1,0 +1,64 @@
+<div class="register-page">
+  <div class="register-container">
+    <h2>Rejestracja</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="form-group">
+        <label for="firstName">Imię</label>
+        <input id="firstName" formControlName="firstName" type="text" />
+        <div
+          *ngIf="
+            registerForm.controls['firstName'].invalid &&
+            registerForm.controls['firstName'].touched
+          "
+        >
+          <small class="error">Imię jest wymagane</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Nazwisko</label>
+        <input id="lastName" formControlName="lastName" type="text" />
+        <div
+          *ngIf="
+            registerForm.controls['lastName'].invalid &&
+            registerForm.controls['lastName'].touched
+          "
+        >
+          <small class="error">Nazwisko jest wymagane</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" formControlName="email" type="email" />
+        <div
+          *ngIf="
+            registerForm.controls['email'].invalid &&
+            registerForm.controls['email'].touched
+          "
+        >
+          <small class="error">Podaj poprawny email</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Hasło</label>
+        <input id="password" formControlName="password" type="password" />
+        <div
+          *ngIf="
+            registerForm.controls['password'].invalid &&
+            registerForm.controls['password'].touched
+          "
+        >
+          <small class="error">Hasło musi mieć co najmniej 6 znaków</small>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+      <button type="submit" [disabled]="isLoading" class="btn btn-primary">
+        {{ isLoading ? "Ładowanie..." : "Zarejestruj się" }}
+      </button>
+    </form>
+  </div>
+</div>
