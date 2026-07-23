@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { NotesService } from '../../services/notes.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../reusable/modal/modal.component';
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
@@ -14,13 +14,14 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   templateUrl: './noteform.component.html',
   styleUrls: ['./noteform.component.scss'],
 })
-export class NoteformComponent {
+export class NoteformComponent implements OnDestroy {
   notes: any[] = [];
   title: string = '';
   content: string = '';
   selectedNote: any = null;
   isModalVisible: boolean = false;
   modalType: 'edit' | 'delete' = 'edit'; // Typ operacji w modal
+  private subscriptions: Subscription[] = []; // Tablica subskrypcji
 
   constructor(private notesService: NotesService, private snackBar: MatSnackBar) {}
 
@@ -29,42 +30,51 @@ export class NoteformComponent {
   }
 
   getNotes(): void {
-    this.notesService.getNotes().pipe(
+    const subscription = this.notesService.getNotes().pipe(
       catchError((error: HttpErrorResponse) => {
         // Logowanie błędu (np. w konsoli lub zewnętrznym serwisie)
         console.error('Błąd podczas pobierania notatek:', error);
-  
+
         // Powiadomienie użytkownika (np. za pomocą toastu)
         this.snackBar.open('Nie udało się pobrać notatek. Spróbuj ponownie później.', 'Zamknij', {
           duration: 5000,
           horizontalPosition: 'right',
           verticalPosition: 'top',
         });
-  
+
         // Zwrot pustej listy jako fallback
         return of([]);
       })
     ).subscribe((data) => {
       this.notes = data;
     });
+
+    // Dodanie subskrypcji do tablicy
+    this.subscriptions.push(subscription);
   }
 
   addNote(): void {
     if (this.title && this.content) {
-      this.notesService.addNote(this.title, this.content).subscribe(() => {
+      const subscription = this.notesService.addNote(this.title, this.content).subscribe(() => {
         this.getNotes();
         this.title = '';
         this.content = '';
       });
+
+      // Dodanie subskrypcji do tablicy
+      this.subscriptions.push(subscription);
     }
   }
 
   deleteNote(): void {
     if (this.selectedNote?.id) {
-      this.notesService.deleteNote(this.selectedNote.id).subscribe(() => {
+      const subscription = this.notesService.deleteNote(this.selectedNote.id).subscribe(() => {
         this.getNotes();
         this.isModalVisible = false;
       });
+
+      // Dodanie subskrypcji do tablicy
+      this.subscriptions.push(subscription);
     }
   }
 
@@ -82,7 +92,7 @@ export class NoteformComponent {
 
   saveNote(): void {
     if (this.selectedNote) {
-      this.notesService
+      const subscription = this.notesService
         .updateNote(
           this.selectedNote.id,
           this.selectedNote.title,
@@ -92,6 +102,13 @@ export class NoteformComponent {
           this.getNotes();
           this.isModalVisible = false;
         });
+
+      // Dodanie subskrypcji do tablicy
+      this.subscriptions.push(subscription);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

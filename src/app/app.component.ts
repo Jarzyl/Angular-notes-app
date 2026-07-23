@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
-import { NoteformComponent } from './components/noteform/noteform.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { routes } from './app.routes';
 import { NavbarComponent } from "./components/navbar/navbar.component";
 
 @Component({

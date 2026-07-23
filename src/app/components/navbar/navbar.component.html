@@ -1,7 +1,17 @@
 <nav class="navbar">
-  <ul>
-    <li><a routerLink="/" routerLinkActive="active" (click)="moveToTheHome()">Home</a></li>
-  </ul>
+  <div>
+      <a
+        class="button"
+        routerLink="/"
+        routerLinkActive="active"
+        (click)="moveToTheHome()"
+        >Home</a
+      >
+      <a class="button" routerLink="/notes" routerLinkActive="active">Notes</a>
+      <a class="button" routerLink="/dashboard" routerLinkActive="active"
+        >Dashboard</a
+      >
+    </div>
 
   <!-- Warunkowe wyświetlanie przycisku w zależności od stanu logowania -->
   <button *ngIf="!isLoggedIn" class="login-btn" (click)="moveToTheLogin()">

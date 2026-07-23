@@ -30,11 +30,10 @@ export class LoginComponent {
   // Metoda obsługująca logowanie
   onLogin(): void {
     if (this.loginForm.invalid) return;
-
+  
     this.isLoading = true;
     this.authService.login(this.loginForm.value).subscribe(
       (response) => {
-        this.authService.saveToken(response.token);
         this.router.navigate(['/dashboard']); // Przekierowanie na stronę po zalogowaniu
       },
       (error) => {
@@ -43,4 +42,5 @@ export class LoginComponent {
       }
     );
   }
+  
 }
